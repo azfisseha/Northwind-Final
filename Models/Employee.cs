@@ -16,4 +16,5 @@ public class Employee
     public string Extension { get; set; }
     public int? ReportsTo { get; set; }
     // TODO: Add (required) email for Identity database link
+    public string Email { get; set; }
 }

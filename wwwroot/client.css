@@ -74,8 +74,9 @@ body {
   color: red;
 }
 .discontinued {
-  opacity: .5;
-}
-#product_rows tr {
-  cursor: pointer;
-}
+    opacity: .5;
+    text-decoration: line-through;
+  }
+  #product_rows tr {
+    cursor: pointer;
+  }
