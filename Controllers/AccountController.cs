@@ -12,7 +12,6 @@ public class AccountController(UserManager<AppUser> userMgr, SignInManager<AppUs
         ViewBag.returnUrl = returnUrl;
         return View();
     }
-
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(UserLogin details, string returnUrl)
     {
@@ -39,5 +38,6 @@ public class AccountController(UserManager<AppUser> userMgr, SignInManager<AppUs
       await _signInManager.SignOutAsync();
       return RedirectToAction("Index", "Home");
     }
+
     public ViewResult AccessDenied() => View();
 }
