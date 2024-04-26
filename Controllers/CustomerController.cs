@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+
 public class CustomerController(DataContext db, UserManager<AppUser> usrMgr) : Controller
 {
   // this controller depends on the DataContext & UserManager classes
