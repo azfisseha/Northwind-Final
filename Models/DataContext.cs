@@ -60,7 +60,17 @@ public class DataContext : DbContext
     this.Add(discount);
     this.SaveChanges();
   }
-  
+  public void EditDiscount(Discount discount)
+  {
+    var discountToUpdate = Discounts.FirstOrDefault(d => d.DiscountId == discount.DiscountId);
+    // crashes here
+    discountToUpdate.Title = discount.Title;
+    discountToUpdate.Description = discount.Description;
+    discountToUpdate.DiscountPercent = discount.DiscountPercent;
+    discountToUpdate.StartTime = discount.StartTime;
+    discountToUpdate.EndTime = discount.EndTime;
+    SaveChanges();
+  }
   public void DeleteDiscount(Discount discount)
   {
     this.Remove(discount);

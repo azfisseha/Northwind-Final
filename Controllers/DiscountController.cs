@@ -21,38 +21,43 @@ public class DiscountController : Controller
   public IActionResult AddDiscount(Discount model)
   {
     Product product = _dataContext.Products.FirstOrDefault(p => p.ProductId == model.ProductId);
+    var discountCodes = _dataContext.Discounts.Select(d => d.Code);
 
     if (ModelState.IsValid)
     {
-        if (product == null)
-        {
-            ModelState.AddModelError("", "Product ID not found.");
-        }
-        else if (model.DiscountPercent < 0 || model.DiscountPercent >= 1)
-        {
-            ModelState.AddModelError("", "Percent must be between 0.00 and 0.99.");
-        }
-        else
-        {
-            int code;
-            do{
-                code = _numGenerator.Next(1000, 10000);
-            }while(_dataContext.Discounts.Any(d => d.Code == code));
-            model.Code = code;
+      if (product == null)
+      {
+        ModelState.AddModelError("", "Product ID not found.");
+      }
+      else if (model.DiscountPercent < 0 || model.DiscountPercent >= 1)
+      {
+        ModelState.AddModelError("", "Percent must be between 0.00 and 0.99.");
+      }
+      else
+      {
+        int code;
+        do {
+          code = _numGenerator.Next(1000, 10000);
+        } while(discountCodes.Any(d => d == code));
+        model.Code = code;
 
-            _dataContext.AddDiscount(model);
-            return RedirectToAction("Index");
-        }
+        _dataContext.AddDiscount(model);
+        return RedirectToAction("Index");
+      }
     }
     return View();
   }
   
   [Authorize(Roles = "northwind-employee")]
-  public IActionResult EditDiscount(int id)
+  public IActionResult EditDiscount(int id) => View(_dataContext.Discounts.FirstOrDefault(d => d.DiscountId == id));
+  [Authorize(Roles = "northwind-employee"), HttpPost, ValidateAntiForgeryToken]
+  public IActionResult EditDiscount(Discount discount)
   {
+      // Edit discount info
+    _dataContext.EditDiscount(discount);
     return RedirectToAction("Index");
   }
-  
+
   [Authorize(Roles = "northwind-employee")]
   public IActionResult DeleteDiscount(int id)
   {
