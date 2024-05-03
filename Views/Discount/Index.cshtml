@@ -12,9 +12,24 @@
             </div>
             <i>Discount expires: @d.EndTime.ToString("MM/dd/yyyy")</i><br />
             <a href="#" data-code="@d.Code" data-title="@d.Title" data-product="@d.Product.ProductName" class="discount"><i class="far fa-hand-point-right"></i> Discount Code</a>
+            @if (User?.Identity?.IsAuthenticated ?? true)
+            {
+                if (User.IsInRole("northwind-employee"))
+                {
+                    <span> | </span><a asp-action="EditDiscount" asp-route-id="@d.DiscountId">Edit</a>
+                    <span> | </span><a asp-action="DeleteDiscount" asp-route-id="@d.DiscountId">Delete</a>
+                }
+            }
         </div>
     }
+    
 </div>
+@if (User.IsInRole("northwind-employee"))
+    {
+        <hr/>
+            <a asp-action="AddDiscount">Add Discount Code</a>
+    }
+
 <!-- toast -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
   <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
