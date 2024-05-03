@@ -30,6 +30,7 @@ public class DiscountController : Controller
   public IActionResult AddDiscount(Discount model)
   {
     Product product = _dataContext.Products.FirstOrDefault(p => p.ProductId == model.ProductId);
+    var discountCodes = _dataContext.Discounts.Select(d => d.Code);
 
     if (ModelState.IsValid)
     {
@@ -45,7 +46,7 @@ public class DiscountController : Controller
             int code;
             do{
                 code = _numGenerator.Next(1000, 10000);
-            }while(_dataContext.Discounts.Any(d => d.Code == code));
+            }while(discountCodes.Any(d => d == code));
             model.Code = code;
 
             _dataContext.AddDiscount(model);
