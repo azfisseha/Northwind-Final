@@ -1,0 +1,22 @@
+@model Discount
+
+<h2 class="mt-3">Add Discount Code</h2>
+<form method="post" class="vstack w-50 mx-auto">
+    <div asp-validation-summary="All"></div>
+    <label class ="mt-2" asp-for="@Model.ProductId">Product ID: </label>
+    <input asp-for="@Model.ProductId" placeholder="Id" />
+    <label class ="mt-2" asp-for="@Model.Title">Discount Title: </label>
+    <input asp-for="@Model.Title" placeholder="Title" />
+    <label class ="mt-2" asp-for="@Model.Description">Description: </label>
+    <input asp-for="@Model.Description">
+    <label class ="mt-2" asp-for="@Model.DiscountPercent">Percent: </label>
+    <input asp-for="@Model.DiscountPercent">
+    <label class ="mt-2" asp-for="@Model.StartTime">Start Time: </label>
+    <input asp-for="@Model.StartTime" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")">
+    <label class ="mt-2" asp-for="@Model.EndTime">End Time: </label>
+    <input asp-for="@Model.EndTime" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")">
+    <button type="submit">Create</button>
+</form>
+
+<hr />
+<a asp-controller="Home" asp-action="Index">Home</a>
