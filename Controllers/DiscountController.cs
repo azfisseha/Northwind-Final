@@ -13,6 +13,9 @@ public class DiscountController : Controller
   public IActionResult Index() => View(_dataContext.Discounts.Include("Product").Where(d => d.StartTime <= DateTime.Now && d.EndTime > DateTime.Now));
 
   [Authorize(Roles = "northwind-employee")]
+  public IActionResult Expired() => View(_dataContext.Discounts.Include("Product").Where(d => d.StartTime > DateTime.Now || d.EndTime <= DateTime.Now));
+
+  [Authorize(Roles = "northwind-employee")]
   public IActionResult DeleteDiscount(int id)
   {
     _dataContext.DeleteDiscount(_dataContext.Discounts.FirstOrDefault(d => d.DiscountId == id));

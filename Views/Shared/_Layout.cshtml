@@ -34,6 +34,13 @@
                         <li><a class="dropdown-item" href="#"><i class="bi bi-search"></i> Product Search</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" asp-controller="Discount" asp-action="Index"><i class="bi bi-tags"></i> Current Discounts</a></li>
+                        @if (User?.Identity?.IsAuthenticated ?? false)
+                        {
+                            @if (User.IsInRole("northwind-employee"))
+                            {
+                                <li><a class="dropdown-item" asp-controller="Discount" asp-action="Expired"><i class="bi bi-tags"></i> Manage Discounts</a></li>
+                            }
+                        }
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
