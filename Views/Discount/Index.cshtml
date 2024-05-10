@@ -27,7 +27,7 @@
 @if (User.IsInRole("northwind-employee"))
     {
         <hr/>
-            <a asp-action="AddDiscount">Add Discount Code</a>
+            <a asp-action="AddDiscount">Add Discount Code</a><span> | </span><a asp-action="Expired">Expired Discounts</a>
     }
 <!-- toast -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
