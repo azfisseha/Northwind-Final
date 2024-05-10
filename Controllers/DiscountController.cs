@@ -11,11 +11,13 @@ public class DiscountController : Controller
   private Random _numGenerator = new Random();
   public DiscountController(DataContext db) => _dataContext = db;
   public IActionResult Index() => View(_dataContext.Discounts.Include("Product").Where(d => d.StartTime <= DateTime.Now && d.EndTime > DateTime.Now));
+
   
   [Authorize(Roles = "northwind-employee")]
   public IActionResult Expired() => View(_dataContext.Discounts.Include("Product").Where(d => d.StartTime > DateTime.Now || d.EndTime <= DateTime.Now));
 
   [Authorize(Roles = "northwind-employee")]
+
   public IActionResult AddDiscount() => View(new Discount());
 
   [Authorize(Roles = "northwind-employee")]
@@ -28,6 +30,7 @@ public class DiscountController : Controller
 
     if (ModelState.IsValid)
     {
+
       if (product == null)
       {
         ModelState.AddModelError("", "Product ID not found.");
