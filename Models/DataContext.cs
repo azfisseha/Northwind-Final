@@ -55,24 +55,26 @@ public class DataContext : DbContext
     return cartItem;
   }
 
-  public void AddDiscount(Discount discount)
-  {
-    Discounts.Add(discount);
-    SaveChanges();
-  }
-  public void EditDiscount(Discount discount)
-  {
-    var discountToUpdate = Discounts.FirstOrDefault(d => d.DiscountId == discount.DiscountId);
-    discountToUpdate.Title = discount.Title;
-    discountToUpdate.Description = discount.Description;
-    discountToUpdate.DiscountPercent = discount.DiscountPercent;
-    discountToUpdate.StartTime = discount.StartTime;
-    discountToUpdate.EndTime = discount.EndTime;
-    SaveChanges();
-  }
   public void DeleteDiscount(Discount discount)
   {
-    Discounts.Remove(discount);
-    SaveChanges();
+    this.Remove(discount);
+    this.SaveChanges();
+  }
+
+  public void AddDiscount(Discount discount)
+  {
+    this.Add(discount);
+    this.SaveChanges();
+  }
+
+  public void EditDiscount(Discount discount)
+  {
+    var discountToEdit = Discounts.FirstOrDefault(d => d.DiscountId == discount.DiscountId);
+    discountToEdit.Title = discount.Title;
+    discountToEdit.Description = discount.Description;
+    discountToEdit.DiscountPercent = discount.DiscountPercent;
+    discountToEdit.StartTime = discount.StartTime;
+    discountToEdit.EndTime = discount.EndTime;
+    this.SaveChanges();
   }
 }
