@@ -12,21 +12,16 @@ public class DiscountController : Controller
   public DiscountController(DataContext db) => _dataContext = db;
   public IActionResult Index() => View(_dataContext.Discounts.Include("Product").Where(d => d.StartTime <= DateTime.Now && d.EndTime > DateTime.Now));
 
+  
   [Authorize(Roles = "northwind-employee")]
   public IActionResult Expired() => View(_dataContext.Discounts.Include("Product").Where(d => d.StartTime > DateTime.Now || d.EndTime <= DateTime.Now));
 
   [Authorize(Roles = "northwind-employee")]
-  public IActionResult DeleteDiscount(int id)
-  {
-    _dataContext.DeleteDiscount(_dataContext.Discounts.FirstOrDefault(d => d.DiscountId == id));
-    return RedirectToAction("Index");
-  }
+
+  public IActionResult AddDiscount() => View(new Discount());
 
   [Authorize(Roles = "northwind-employee")]
-  public IActionResult AddDiscount() => View(new Discount());
-  
   [HttpPost]
-  [Authorize(Roles = "northwind-employee")]
   [ValidateAntiForgeryToken]
   public IActionResult AddDiscount(Discount model)
   {
@@ -35,37 +30,46 @@ public class DiscountController : Controller
 
     if (ModelState.IsValid)
     {
-        if(product == null)
-        {
-            ModelState.AddModelError("", "Product ID Not Found");
-        }
-        else if(model.DiscountPercent < 0 || model.DiscountPercent > 1)
-        {
-            ModelState.AddModelError("", "Percent must be between 0.00 and 0.99");
-        }
-        else{
-            int code;
-            do{
-                code = _numGenerator.Next(1000, 10000);
-            }while(discountCodes.Any(d => d == code));
-            model.Code = code;
 
-            _dataContext.AddDiscount(model);
-            return RedirectToAction("Index");
-        }
+      if (product == null)
+      {
+        ModelState.AddModelError("", "Product ID not found.");
+      }
+      else if (model.DiscountPercent < 0 || model.DiscountPercent >= 1)
+      {
+        ModelState.AddModelError("", "Percent must be between 0.00 and 0.99.");
+      }
+      else
+      {
+        int code;
+        do {
+          code = _numGenerator.Next(1000, 10000);
+        } while(discountCodes.Any(d => d == code));
+        model.Code = code;
+
+        _dataContext.AddDiscount(model);
+        return RedirectToAction("Index");
+      }
     }
     return View();
   }
-
+  
   [Authorize(Roles = "northwind-employee")]
   public IActionResult EditDiscount(int id) => View(_dataContext.Discounts.Include("Product").FirstOrDefault(d => d.DiscountId == id));
-
-  [HttpPost]
   [Authorize(Roles = "northwind-employee")]
+  [HttpPost]
   [ValidateAntiForgeryToken]
   public IActionResult EditDiscount(Discount discount)
   {
+      // Edit discount info
     _dataContext.EditDiscount(discount);
+    return RedirectToAction("Index");
+  }
+
+  [Authorize(Roles = "northwind-employee")]
+  public IActionResult DeleteDiscount(int id)
+  {
+    _dataContext.DeleteDiscount(_dataContext.Discounts.FirstOrDefault(d => d.DiscountId == id));
     return RedirectToAction("Index");
   }
 }
