@@ -55,7 +55,7 @@ public class DiscountController : Controller
   }
 
   [Authorize(Roles = "northwind-employee")]
-  public IActionResult EditDiscount(int id) => View(_dataContext.Discounts.FirstOrDefault(d => d.DiscountId == id));
+  public IActionResult EditDiscount(int id) => View(_dataContext.Discounts.Include("Product").FirstOrDefault(d => d.DiscountId == id));
 
   [HttpPost]
   [Authorize(Roles = "northwind-employee")]
