@@ -59,6 +59,7 @@ body {
     margin-bottom: 60px;
     font-family: 'Fjalla One', sans-serif;
 }
+
 .footer {
     position: absolute;
     bottom: 0;
@@ -66,17 +67,21 @@ body {
     white-space: nowrap;
     line-height: 60px; /* Vertically center the text there */
 }
+
 .featured {
     font-size: .9em;
 }
+
 .validation-summary-errors
 {
-  color: red;
+    color: red;
 }
+
 .discontinued {
     opacity: .5;
     text-decoration: line-through;
-  }
-  #product_rows tr {
+}
+
+#product_rows tr {
     cursor: pointer;
-  }
+}
