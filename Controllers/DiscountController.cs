@@ -12,8 +12,6 @@ public class DiscountController : Controller
   public DiscountController(DataContext db) => _dataContext = db;
   public IActionResult Index() => View(_dataContext.Discounts.Include("Product").Where(d => d.StartTime <= DateTime.Now && d.EndTime > DateTime.Now));
 
-
-
   [Authorize(Roles = "northwind-employee")]
   public IActionResult DeleteDiscount(int id)
   {
@@ -30,6 +28,7 @@ public class DiscountController : Controller
   public IActionResult AddDiscount(Discount model)
   {
     Product product = _dataContext.Products.FirstOrDefault(p => p.ProductId == model.ProductId);
+    var discountCodes = _dataContext.Discounts.Select(d => d.Code);
 
     if (ModelState.IsValid)
     {
@@ -45,7 +44,7 @@ public class DiscountController : Controller
             int code;
             do{
                 code = _numGenerator.Next(1000, 10000);
-            }while(_dataContext.Discounts.Any(d => d.Code == code));
+            }while(discountCodes.Any(d => d == code));
             model.Code = code;
 
             _dataContext.AddDiscount(model);
@@ -56,9 +55,14 @@ public class DiscountController : Controller
   }
 
   [Authorize(Roles = "northwind-employee")]
-  public IActionResult EditDiscount(int id)
+  public IActionResult EditDiscount(int id) => View(_dataContext.Discounts.Include("Product").FirstOrDefault(d => d.DiscountId == id));
+
+  [HttpPost]
+  [Authorize(Roles = "northwind-employee")]
+  [ValidateAntiForgeryToken]
+  public IActionResult EditDiscount(Discount discount)
   {
+    _dataContext.EditDiscount(discount);
     return RedirectToAction("Index");
   }
-
 }
