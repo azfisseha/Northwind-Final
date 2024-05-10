@@ -66,4 +66,15 @@ public class DataContext : DbContext
     this.Add(discount);
     this.SaveChanges();
   }
+
+  public void EditDiscount(Discount discount)
+  {
+    var discountToEdit = Discounts.FirstOrDefault(d => d.DiscountId == discount.DiscountId);
+    discountToEdit.Title = discount.Title;
+    discountToEdit.Description = discount.Description;
+    discountToEdit.DiscountPercent = discount.DiscountPercent;
+    discountToEdit.StartTime = discount.StartTime;
+    discountToEdit.EndTime = discount.EndTime;
+    this.SaveChanges();
+  }
 }
