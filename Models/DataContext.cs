@@ -54,4 +54,27 @@ public class DataContext : DbContext
     cartItem.Product = Products.Find(cartItem.ProductId);
     return cartItem;
   }
+
+  public void DeleteDiscount(Discount discount)
+  {
+    this.Remove(discount);
+    this.SaveChanges();
+  }
+
+  public void AddDiscount(Discount discount)
+  {
+    this.Add(discount);
+    this.SaveChanges();
+  }
+
+  public void EditDiscount(Discount discount)
+  {
+    var discountToEdit = Discounts.FirstOrDefault(d => d.DiscountId == discount.DiscountId);
+    discountToEdit.Title = discount.Title;
+    discountToEdit.Description = discount.Description;
+    discountToEdit.DiscountPercent = discount.DiscountPercent;
+    discountToEdit.StartTime = discount.StartTime;
+    discountToEdit.EndTime = discount.EndTime;
+    this.SaveChanges();
+  }
 }
